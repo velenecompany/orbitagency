@@ -1,6 +1,5 @@
 'use client'
-import { useEffect, useState, useRef } from 'react'
-import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 
 function useTypewriter(lines: { text: string; italic?: boolean }[], speed: number, start: boolean) {
   const [displayed, setDisplayed] = useState<{ text: string; italic?: boolean }[]>([])
@@ -41,10 +40,12 @@ export default function Hero() {
   const [started, setStarted] = useState(false)
   const [showSub, setShowSub] = useState(false)
   const [showBtn, setShowBtn] = useState(false)
-  const [showImage, setShowImage] = useState(false)
-  const imageRef = useRef<HTMLDivElement>(null)
+  const [showSphere, setShowSphere] = useState(false)
+  const svgRef = useRef<SVGGElement>(null)
+  const sphereWrapRef = useRef<HTMLDivElement>(null)
   const animRef = useRef<number>(0)
-  const progressRef = useRef(0)
+  const mouseRef = useRef({ x: 0, y: 0 })
+  const currentRef = useRef({ x: 0, y: 0 })
 
   const lines = [
     { text: 'Hechos para' },
@@ -55,7 +56,7 @@ export default function Hero() {
 
   useEffect(() => {
     const t1 = setTimeout(() => setStarted(true), 400)
-    const t2 = setTimeout(() => setShowImage(true), 600)
+    const t2 = setTimeout(() => setShowSphere(true), 500)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 
@@ -66,51 +67,93 @@ export default function Hero() {
     }
   }, [done])
 
-  // Animación de subida continua y suave
+  // Generate sphere dots
   useEffect(() => {
-    if (!showImage) return
-    let start: number | null = null
-    const duration = 18000 // 18 segundos para subir completo, muy lento
-
-    function animate(timestamp: number) {
-      if (!start) start = timestamp
-      const elapsed = timestamp - start
-      progressRef.current = (elapsed % duration) / duration
-
-      if (imageRef.current) {
-        // Mueve la imagen de abajo hacia arriba en loop
-        const yOffset = progressRef.current * 120 // máx 120px de movimiento
-        imageRef.current.style.transform = `translateY(${-yOffset}px)`
+    const g = svgRef.current
+    if (!g) return
+    g.innerHTML = ''
+    const cx = 210, cy = 210, R = 195
+    const cols = 24, rows = 24
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = 8 + c * (404 / cols)
+        const y = 8 + r * (404 / rows)
+        const dx = x - cx, dy = y - cy
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist > R) continue
+        const norm = dist / R
+        const hlx = cx - R * 0.35, hly = cy - R * 0.3
+        const hdx = x - hlx, hdy = y - hly
+        const hdist = Math.sqrt(hdx * hdx + hdy * hdy)
+        const hNorm = Math.min(hdist / (R * 1.15), 1)
+        const size = (1 - norm * 0.65) * (0.35 + (1 - hNorm) * 0.65) * 10 + 0.8
+        const bright = Math.round(15 + (1 - hNorm) * 0.72 * 230 + (1 - norm) * 0.28 * 55)
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+        circle.setAttribute('cx', x.toFixed(1))
+        circle.setAttribute('cy', y.toFixed(1))
+        circle.setAttribute('r', Math.max(0.7, size).toFixed(1))
+        circle.setAttribute('fill', `rgb(${bright},${bright},${bright})`)
+        g.appendChild(circle)
       }
+    }
+  }, [])
+
+  // Mouse tracking + smooth follow animation
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const wrap = sphereWrapRef.current
+      if (!wrap) return
+      const rect = wrap.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      // Normalize -1 to 1 relative to center of sphere
+      mouseRef.current = {
+        x: (e.clientX - centerX) / (rect.width / 2),
+        y: (e.clientY - centerY) / (rect.height / 2),
+      }
+    }
+
+    const handleMouseLeave = () => {
+      // Smoothly return to center
+      mouseRef.current = { x: 0, y: 0 }
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseleave', handleMouseLeave)
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseleave', handleMouseLeave)
+    }
+  }, [])
+
+  // Smooth lerp animation loop
+  useEffect(() => {
+    if (!showSphere) return
+
+    function animate() {
+      // Lerp current toward mouse target
+      currentRef.current.x += (mouseRef.current.x - currentRef.current.x) * 0.06
+      currentRef.current.y += (mouseRef.current.y - currentRef.current.y) * 0.06
+
+      const svg = svgRef.current?.closest('svg') as SVGSVGElement | null
+      if (svg) {
+        const maxMove = 28
+        const tx = currentRef.current.x * maxMove
+        const ty = currentRef.current.y * maxMove
+        const rotateY = currentRef.current.x * 18
+        const rotateX = -currentRef.current.y * 12
+        svg.style.transform = `translate(${tx}px, ${ty}px) rotateY(${rotateY}deg) rotateX(${rotateX}deg)`
+      }
+
       animRef.current = requestAnimationFrame(animate)
     }
 
     animRef.current = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(animRef.current)
-  }, [showImage])
-
-  // Parallax al scroll encima del loop
-  useEffect(() => {
-    const handleScroll = () => {
-      const wrapper = imageRef.current?.parentElement
-      if (wrapper) {
-        wrapper.style.transform = `translateY(${window.scrollY * 0.07}px)`
-      }
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [showSphere])
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0 56px',
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
-      {/* Content */}
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 56px', position: 'relative', overflow: 'hidden' }}>
       <div style={{ flex: 1, maxWidth: '750px', paddingTop: '80px', zIndex: 2 }}>
         <div style={{
           display: 'flex', alignItems: 'center', gap: '14px',
@@ -122,10 +165,8 @@ export default function Hero() {
           transition: 'opacity 0.8s 0.3s, transform 0.8s 0.3s',
         }}>
           <span style={{
-            display: 'block', height: '1px',
-            background: 'var(--white2)',
-            width: started ? '36px' : '0px',
-            transition: 'width 1s 0.5s',
+            display: 'block', height: '1px', background: 'var(--white2)',
+            width: started ? '36px' : '0px', transition: 'width 1s 0.5s',
           }} />
           Un studio nativo en IA
         </div>
@@ -180,57 +221,46 @@ export default function Hero() {
         </button>
       </div>
 
-      {/* Hero Image con animación de subida */}
-      <div style={{
-        position: 'absolute',
-        right: 0, top: 0, bottom: 0,
-        width: '50%',
-        overflow: 'hidden',
-      }}>
+      {/* Sphere con mouse tracking */}
+      <div
+        ref={sphereWrapRef}
+        style={{
+          position: 'absolute', right: 0, top: 0, bottom: 0, width: '46%',
+          overflow: 'hidden', perspective: '800px',
+        }}
+      >
         <div style={{
-          position: 'absolute', left: 0, top: 0, bottom: 0,
-          width: '280px',
-          background: 'linear-gradient(90deg, var(--black) 0%, transparent 100%)',
-          zIndex: 1,
-        }} />
-        <div style={{
-          position: 'absolute', left: 0, right: 0, bottom: 0,
-          height: '200px',
-          background: 'linear-gradient(0deg, var(--black) 0%, transparent 100%)',
-          zIndex: 1,
-        }} />
-        <div style={{
-          position: 'absolute', left: 0, right: 0, top: 0,
-          height: '120px',
-          background: 'linear-gradient(180deg, var(--black) 0%, transparent 100%)',
-          zIndex: 1,
-        }} />
-
-        <div
-          style={{
-            width: '100%',
-            height: '120%',
-            opacity: showImage ? 1 : 0,
-            transition: 'opacity 1.6s 0.6s',
-            position: 'relative',
-          }}
-        >
-          <div
-            ref={imageRef}
+          width: '100%', height: '100%',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          position: 'relative',
+        }}>
+          <div style={{
+            position: 'absolute', left: 0, top: 0, bottom: 0, width: '240px',
+            background: 'linear-gradient(90deg, var(--black) 0%, transparent 100%)', zIndex: 1,
+          }} />
+          <svg
+            viewBox="0 0 420 420"
             style={{
-              width: '100%',
-              height: '100%',
-              position: 'relative',
+              width: '420px', height: '420px',
+              opacity: showSphere ? 1 : 0,
+              transition: 'opacity 1.4s 0.4s',
+              transformStyle: 'preserve-3d',
+              willChange: 'transform',
             }}
           >
-            <Image
-              src="/hero-figure.png"
-              alt="Figura escalando"
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'center center' }}
-              priority
-            />
-          </div>
+            <defs>
+              <radialGradient id="sphGrad" cx="38%" cy="32%" r="62%">
+                <stop offset="0%" stopColor="#fff" stopOpacity="1" />
+                <stop offset="45%" stopColor="#999" stopOpacity="0.8" />
+                <stop offset="80%" stopColor="#333" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#000" stopOpacity="0" />
+              </radialGradient>
+              <mask id="sphMask">
+                <circle cx="210" cy="210" r="200" fill="url(#sphGrad)" />
+              </mask>
+            </defs>
+            <g ref={svgRef} mask="url(#sphMask)" />
+          </svg>
         </div>
       </div>
     </div>
