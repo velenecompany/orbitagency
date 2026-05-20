@@ -1,67 +1,83 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 
-const lines = [
+const fullLines = [
   { text: 'Tu competencia ya', italic: false },
   { text: 'está usando ', italic: false },
   { text: 'IA.', italic: true },
 ]
 
+const fullText = fullLines.map(l => l.text).join('\n')
+
 export default function CTA() {
   const ref = useRef<HTMLDivElement>(null)
-  const [started, setStarted] = useState(false)
-  const [displayed, setDisplayed] = useState<{ text: string; italic: boolean }[]>([])
-  const [lineIdx, setLineIdx] = useState(0)
-  const [charIdx, setCharIdx] = useState(0)
-  const [done, setDone] = useState(false)
+  const [charCount, setCharCount] = useState(0)
   const [showSub, setShowSub] = useState(false)
   const [showBtn, setShowBtn] = useState(false)
   const [eyebrowVisible, setEyebrowVisible] = useState(false)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  const clearAnim = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+  }
+
+  const animate = useCallback((dir: 'forward' | 'backward') => {
+    clearAnim()
+    intervalRef.current = setInterval(() => {
+      setCharCount(prev => {
+        if (dir === 'forward') {
+          if (prev >= fullText.length) { clearAnim(); return prev }
+          return prev + 1
+        } else {
+          if (prev <= 0) { clearAnim(); return 0 }
+          return prev - 1
+        }
+      })
+    }, 48)
+  }, [])
 
   useEffect(() => {
     const obs = new IntersectionObserver(
       entries => {
-        if (entries[0].isIntersecting) {
+        const entry = entries[0]
+        if (entry.isIntersecting) {
           setEyebrowVisible(true)
-          setTimeout(() => setStarted(true), 300)
-          obs.disconnect()
+          setTimeout(() => animate('forward'), 300)
+        } else {
+          setEyebrowVisible(false)
+          setShowSub(false)
+          setShowBtn(false)
+          animate('backward')
         }
       },
       { threshold: 0.25 }
     )
     if (ref.current) obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [])
+    return () => { obs.disconnect(); clearAnim() }
+  }, [animate])
 
   useEffect(() => {
-    if (!started || lineIdx >= lines.length) {
-      if (lineIdx >= lines.length) setDone(true)
-      return
-    }
-    const line = lines[lineIdx]
-    if (charIdx < line.text.length) {
-      const t = setTimeout(() => {
-        setDisplayed(prev => {
-          const updated = [...prev]
-          if (!updated[lineIdx]) updated[lineIdx] = { text: '', italic: line.italic }
-          updated[lineIdx] = { ...updated[lineIdx], text: updated[lineIdx].text + line.text[charIdx] }
-          return updated
-        })
-        setCharIdx(c => c + 1)
-      }, 48 + Math.random() * 20)
-      return () => clearTimeout(t)
-    } else {
-      const t = setTimeout(() => { setLineIdx(l => l + 1); setCharIdx(0) }, 150)
-      return () => clearTimeout(t)
-    }
-  }, [started, lineIdx, charIdx])
-
-  useEffect(() => {
-    if (done) {
+    if (charCount >= fullText.length) {
       setTimeout(() => setShowSub(true), 200)
       setTimeout(() => setShowBtn(true), 500)
     }
-  }, [done])
+    if (charCount === 0) {
+      setShowSub(false)
+      setShowBtn(false)
+    }
+  }, [charCount])
+
+  const getDisplayedLines = () => {
+    let remaining = charCount
+    return fullLines.map(line => {
+      const visible = line.text.slice(0, remaining)
+      remaining = Math.max(0, remaining - line.text.length)
+      return { text: visible, italic: line.italic }
+    })
+  }
+
+  const displayedLines = getDisplayedLines()
+  const isDone = charCount >= fullText.length
 
   return (
     <div
@@ -99,18 +115,20 @@ export default function CTA() {
         maxWidth: '720px', margin: '0 auto',
         position: 'relative', minHeight: '2.8em',
       }}>
-        {displayed.map((line, i) => (
-          <span key={i}>
-            {i > 0 && <br />}
-            <span style={{
-              fontStyle: line.italic ? 'italic' : 'normal',
-              color: line.italic ? 'var(--white2)' : 'var(--white)',
-            }}>
-              {line.text}
+        {displayedLines.map((line, i) => (
+          line.text.length > 0 && (
+            <span key={i}>
+              {i > 0 && <br />}
+              <span style={{
+                fontStyle: line.italic ? 'italic' : 'normal',
+                color: line.italic ? 'var(--white2)' : 'var(--white)',
+              }}>
+                {line.text}
+              </span>
             </span>
-          </span>
+          )
         ))}
-        {!done && started && <span className="tw-cursor" />}
+        {!isDone && charCount > 0 && <span className="tw-cursor" />}
       </h2>
 
       <p style={{
