@@ -37,7 +37,7 @@ export default function Contacto() {
 
   useEffect(() => { setTimeout(() => setStarted(true), 100) }, [])
 
-  const whatsappNumber = '521249932041'
+  const whatsappNumber = '523312499320'
 
   const handleWhatsapp = () => {
     if (!name || !business || !service) return
