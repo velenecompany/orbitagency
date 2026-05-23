@@ -56,7 +56,6 @@ export default function Quote() {
     return () => { obs.disconnect(); clearAnim() }
   }, [animate])
 
-  // Reconstruct lines from charCount
   const getDisplayedLines = () => {
     let remaining = charCount
     return fullLines.map(line => {
@@ -70,47 +69,59 @@ export default function Quote() {
   const isDone = charCount >= fullText.length
 
   return (
-    <div ref={ref} style={{
-      padding: '100px 56px',
-      borderTop: '1px solid rgba(240,237,232,0.05)',
-      display: 'grid',
-      gridTemplateColumns: '180px 1fr',
-      gap: '60px',
-      alignItems: 'start',
-    }}>
-      <div style={{
-        fontFamily: "'DM Sans',sans-serif", fontSize: '10px',
-        letterSpacing: '3px', color: 'var(--gray)',
-        textTransform: 'uppercase', paddingTop: '10px',
-        opacity: labelVisible ? 1 : 0,
-        transform: labelVisible ? 'translateY(0)' : 'translateY(20px)',
-        transition: 'opacity 0.6s, transform 0.6s',
-      }}>
-        Nuestra filosofía
+    <>
+      <div ref={ref} className="quote-section">
+        <div style={{
+          fontFamily: "'DM Sans',sans-serif", fontSize: '10px',
+          letterSpacing: '3px', color: 'var(--gray)',
+          textTransform: 'uppercase',
+          opacity: labelVisible ? 1 : 0,
+          transform: labelVisible ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'opacity 0.6s, transform 0.6s',
+        }}>
+          Nuestra filosofía
+        </div>
+
+        <p style={{
+          fontFamily: "'Cormorant Garamond',serif",
+          fontSize: 'clamp(24px, 3.5vw, 50px)',
+          fontWeight: 300, lineHeight: 1.15,
+          letterSpacing: '-0.8px', color: 'var(--white)',
+          minHeight: '3em',
+        }}>
+          {displayedLines.map((line, i) => (
+            line.text.length > 0 && (
+              <span key={i}>
+                {i > 0 && <br />}
+                <span style={{
+                  fontStyle: line.italic ? 'italic' : 'normal',
+                  color: line.italic ? 'var(--white2)' : 'var(--white)',
+                }}>
+                  {line.text}
+                </span>
+              </span>
+            )
+          ))}
+          {!isDone && charCount > 0 && <span className="tw-cursor" />}
+        </p>
       </div>
 
-      <p style={{
-        fontFamily: "'Cormorant Garamond',serif",
-        fontSize: 'clamp(30px,3.5vw,50px)',
-        fontWeight: 300, lineHeight: 1.15,
-        letterSpacing: '-0.8px', color: 'var(--white)',
-        minHeight: '4em',
-      }}>
-        {displayedLines.map((line, i) => (
-          line.text.length > 0 && (
-            <span key={i}>
-              {i > 0 && <br />}
-              <span style={{
-                fontStyle: line.italic ? 'italic' : 'normal',
-                color: line.italic ? 'var(--white2)' : 'var(--white)',
-              }}>
-                {line.text}
-              </span>
-            </span>
-          )
-        ))}
-        {!isDone && charCount > 0 && <span className="tw-cursor" />}
-      </p>
-    </div>
+      <style>{`
+        .quote-section {
+          padding: clamp(60px, 8vw, 100px) clamp(20px, 5vw, 56px);
+          border-top: 1px solid rgba(240,237,232,0.05);
+          display: grid;
+          grid-template-columns: 180px 1fr;
+          gap: 60px;
+          align-items: start;
+        }
+        @media (max-width: 768px) {
+          .quote-section {
+            grid-template-columns: 1fr;
+            gap: 24px;
+          }
+        }
+      `}</style>
+    </>
   )
 }

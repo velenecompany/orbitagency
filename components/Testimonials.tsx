@@ -36,19 +36,16 @@ function TestimonialCard({ t, delay }: { t: typeof testimonials[0]; delay: numbe
   }, [])
 
   return (
-    <div
-      ref={ref}
-      style={{
-        background: 'var(--black)',
-        padding: '36px 32px',
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(44px)',
-        transition: `opacity 0.95s ${delay}s cubic-bezier(0.16,1,0.3,1), transform 0.95s ${delay}s cubic-bezier(0.16,1,0.3,1)`,
-      }}
-    >
+    <div ref={ref} style={{
+      background: 'var(--black)',
+      padding: 'clamp(24px, 4vw, 36px) clamp(20px, 3vw, 32px)',
+      opacity: visible ? 1 : 0,
+      transform: visible ? 'translateY(0)' : 'translateY(44px)',
+      transition: `opacity 0.95s ${delay}s cubic-bezier(0.16,1,0.3,1), transform 0.95s ${delay}s cubic-bezier(0.16,1,0.3,1)`,
+    }}>
       <p style={{
         fontFamily: "'Cormorant Garamond',serif",
-        fontSize: '18px', fontWeight: 300,
+        fontSize: 'clamp(16px, 2vw, 18px)', fontWeight: 300,
         lineHeight: 1.6, color: 'var(--white2)',
         marginBottom: '28px', fontStyle: 'italic',
       }}>
@@ -56,7 +53,7 @@ function TestimonialCard({ t, delay }: { t: typeof testimonials[0]; delay: numbe
       </p>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <div style={{
-          width: '36px', height: '36px',
+          width: '36px', height: '36px', flexShrink: 0,
           background: 'rgba(240,237,232,0.06)',
           border: '1px solid rgba(240,237,232,0.1)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -92,26 +89,39 @@ export default function Testimonials() {
   }, [])
 
   return (
-    <section style={{ padding: '80px 56px 120px', borderTop: '1px solid rgba(240,237,232,0.05)' }}>
-      <div ref={ref} style={{ marginBottom: '72px' }}>
-        <div style={{
-          fontFamily: "'DM Sans',sans-serif", fontSize: '10px', letterSpacing: '3px',
-          color: 'var(--white2)', textTransform: 'uppercase',
-          opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(44px)',
-          transition: 'opacity 0.95s cubic-bezier(0.16,1,0.3,1), transform 0.95s cubic-bezier(0.16,1,0.3,1)',
-        }}>
-          04 · Clientes
+    <>
+      <section style={{ padding: 'clamp(40px, 8vw, 80px) clamp(20px, 5vw, 56px) clamp(60px, 10vw, 120px)', borderTop: '1px solid rgba(240,237,232,0.05)' }}>
+        <div ref={ref} style={{ marginBottom: 'clamp(32px, 5vw, 72px)' }}>
+          <div style={{
+            fontFamily: "'DM Sans',sans-serif", fontSize: '10px', letterSpacing: '3px',
+            color: 'var(--white2)', textTransform: 'uppercase',
+            opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(44px)',
+            transition: 'opacity 0.95s cubic-bezier(0.16,1,0.3,1), transform 0.95s cubic-bezier(0.16,1,0.3,1)',
+          }}>
+            04 · Clientes
+          </div>
         </div>
-      </div>
 
-      <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(3,1fr)',
-        gap: '1px', background: 'rgba(240,237,232,0.05)',
-      }}>
-        {testimonials.map((t, i) => (
-          <TestimonialCard key={t.initials} t={t} delay={i * 0.12} />
-        ))}
-      </div>
-    </section>
+        <div className="testimonials-grid">
+          {testimonials.map((t, i) => (
+            <TestimonialCard key={t.initials} t={t} delay={i * 0.12} />
+          ))}
+        </div>
+      </section>
+
+      <style>{`
+        .testimonials-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1px;
+          background: rgba(240,237,232,0.05);
+        }
+        @media (max-width: 768px) {
+          .testimonials-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+    </>
   )
 }
