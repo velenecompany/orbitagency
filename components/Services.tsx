@@ -47,50 +47,78 @@ function ServiceRow({ service, delay }: { service: typeof services[0]; delay: nu
   const [hovered, setHovered] = useState(false)
 
   return (
-    <div
-      ref={ref}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '72px 1fr 1fr auto',
-        alignItems: 'start',
-        padding: '32px 0',
-        borderTop: '1px solid rgba(240,237,232,0.05)',
-        gap: '36px',
-        cursor: 'default',
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(44px)',
-        transition: `opacity 0.95s ${delay}s cubic-bezier(0.16,1,0.3,1), transform 0.95s ${delay}s cubic-bezier(0.16,1,0.3,1)`,
-      }}
-    >
-      <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', letterSpacing: '2px', color: 'var(--gray)', paddingTop: '6px' }}>
-        {service.num}
+    <>
+      <div
+        ref={ref}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className="service-row"
+        style={{
+          padding: 'clamp(20px, 3vw, 32px) 0',
+          borderTop: '1px solid rgba(240,237,232,0.05)',
+          gap: 'clamp(16px, 3vw, 36px)',
+          cursor: 'default',
+          opacity: visible ? 1 : 0,
+          transform: visible ? 'translateY(0)' : 'translateY(44px)',
+          transition: `opacity 0.95s ${delay}s cubic-bezier(0.16,1,0.3,1), transform 0.95s ${delay}s cubic-bezier(0.16,1,0.3,1)`,
+        }}
+      >
+        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', letterSpacing: '2px', color: 'var(--gray)', paddingTop: '4px', flexShrink: 0 }}>
+          {service.num}
+        </div>
+        <div style={{
+          fontFamily: "'Cormorant Garamond',serif",
+          fontSize: 'clamp(22px, 3vw, 36px)',
+          fontWeight: 300, letterSpacing: '-0.5px',
+          color: hovered ? 'var(--white)' : 'var(--white2)',
+          transition: 'color 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1)',
+          transform: hovered ? 'translateX(8px)' : 'translateX(0)',
+          lineHeight: 1.1,
+        }}>
+          {service.title}
+        </div>
+        <div className="service-desc" style={{ fontSize: '12px', color: 'var(--gray)', lineHeight: 1.75, paddingTop: '4px', fontWeight: 300, fontFamily: "'DM Sans',sans-serif" }}>
+          {service.desc}
+        </div>
+        <div className="service-tags" style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'flex-end', paddingTop: '4px' }}>
+          {service.tags.map(tag => (
+            <span key={tag} style={{
+              fontFamily: "'DM Sans',sans-serif", fontSize: '9px', letterSpacing: '1.5px',
+              color: hovered ? 'var(--white2)' : 'var(--gray)',
+              textTransform: 'uppercase',
+              border: `1px solid ${hovered ? 'rgba(240,237,232,0.15)' : 'rgba(240,237,232,0.07)'}`,
+              padding: '4px 10px', whiteSpace: 'nowrap',
+              transition: 'color 0.3s, border-color 0.3s',
+            }}>
+              {tag}
+            </span>
+          ))}
+        </div>
       </div>
-      <div style={{
-        fontFamily: "'Cormorant Garamond',serif",
-        fontSize: 'clamp(24px,2.8vw,36px)',
-        fontWeight: 300, letterSpacing: '-0.5px',
-        color: hovered ? 'var(--white)' : 'var(--white2)',
-        transition: 'color 0.3s', lineHeight: 1.1,
-      }}>
-        {service.title}
-      </div>
-      <div style={{ fontSize: '12px', color: 'var(--gray)', lineHeight: 1.75, paddingTop: '5px', maxWidth: '300px', fontWeight: 300, fontFamily: "'DM Sans',sans-serif" }}>
-        {service.desc}
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'flex-end', paddingTop: '5px' }}>
-        {service.tags.map(tag => (
-          <span key={tag} style={{
-            fontFamily: "'DM Sans',sans-serif", fontSize: '9px', letterSpacing: '1.5px',
-            color: 'var(--gray)', textTransform: 'uppercase',
-            border: '1px solid rgba(240,237,232,0.07)', padding: '4px 10px', whiteSpace: 'nowrap',
-          }}>
-            {tag}
-          </span>
-        ))}
-      </div>
-    </div>
+      <style>{`
+        .service-row {
+          display: grid;
+          grid-template-columns: 48px 1fr 1fr auto;
+        }
+        @media (max-width: 768px) {
+          .service-row {
+            grid-template-columns: 36px 1fr;
+            grid-template-rows: auto auto auto;
+          }
+          .service-desc {
+            grid-column: 2;
+            margin-top: 8px;
+          }
+          .service-tags {
+            grid-column: 2;
+            flex-direction: row !important;
+            flex-wrap: wrap;
+            align-items: flex-start !important;
+            margin-top: 12px;
+          }
+        }
+      `}</style>
+    </>
   )
 }
 
@@ -98,8 +126,8 @@ export default function Services() {
   const { ref: headerRef, visible: headerVisible } = useReveal()
 
   return (
-    <section style={{ padding: '80px 56px 120px', borderTop: '1px solid rgba(240,237,232,0.05)' }}>
-      <div ref={headerRef} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '72px' }}>
+    <section style={{ padding: 'clamp(40px, 8vw, 80px) clamp(20px, 5vw, 56px) clamp(60px, 10vw, 120px)', borderTop: '1px solid rgba(240,237,232,0.05)' }}>
+      <div ref={headerRef} className="services-header">
         <div style={{
           fontFamily: "'DM Sans',sans-serif", fontSize: '10px', letterSpacing: '3px',
           color: 'var(--white2)', textTransform: 'uppercase',
@@ -110,9 +138,8 @@ export default function Services() {
         </div>
         <h2 style={{
           fontFamily: "'Cormorant Garamond',serif",
-          fontSize: 'clamp(38px,4.5vw,56px)', fontWeight: 300,
+          fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 300,
           letterSpacing: '-1.5px', lineHeight: 1.0,
-          maxWidth: '480px', textAlign: 'right',
           opacity: headerVisible ? 1 : 0, transform: headerVisible ? 'translateY(0)' : 'translateY(44px)',
           transition: 'opacity 0.95s 0.18s cubic-bezier(0.16,1,0.3,1), transform 0.95s 0.18s cubic-bezier(0.16,1,0.3,1)',
         }}>
@@ -124,6 +151,22 @@ export default function Services() {
         <ServiceRow key={s.num} service={s} delay={i * 0.1} />
       ))}
       <div style={{ borderBottom: '1px solid rgba(240,237,232,0.05)' }} />
+
+      <style>{`
+        .services-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          margin-bottom: clamp(40px, 6vw, 72px);
+          gap: 24px;
+        }
+        @media (max-width: 768px) {
+          .services-header {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+        }
+      `}</style>
     </section>
   )
 }

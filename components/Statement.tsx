@@ -44,28 +44,27 @@ export default function Statement() {
 
   return (
     <div ref={ref} style={{
-      padding: '130px 56px',
+      padding: 'clamp(60px, 10vw, 130px) clamp(20px, 5vw, 56px)',
       borderTop: '1px solid rgba(240,237,232,0.05)',
     }}>
       <p style={{
         fontFamily: "'Cormorant Garamond', serif",
-        fontSize: 'clamp(40px, 5vw, 68px)',
+        fontSize: 'clamp(28px, 5vw, 68px)',
         fontWeight: 300,
         lineHeight: 1.12,
-        letterSpacing: '-1.5px',
+        letterSpacing: '-1px',
         maxWidth: '1040px',
       }}>
         {words.map((word, i) => (
           <span key={i}>
-            <span
-              className="word-reveal"
-              style={{
-                color: word.faded ? 'var(--gray)' : 'var(--white)',
-                fontStyle: word.italic ? 'italic' : 'normal',
-                transitionDelay: `${i * 0.045}s`,
-                ...(visible ? { opacity: 1, transform: 'translateY(0)' } : {}),
-              }}
-            >
+            <span style={{
+              display: 'inline-block',
+              color: word.faded ? 'var(--gray)' : 'var(--white)',
+              fontStyle: word.italic ? 'italic' : 'normal',
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0)' : 'translateY(18px)',
+              transition: `opacity 0.55s ${i * 0.045}s, transform 0.55s ${i * 0.045}s`,
+            }}>
               {word.text}
             </span>
             {' '}
