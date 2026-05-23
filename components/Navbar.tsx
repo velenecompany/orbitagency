@@ -6,7 +6,7 @@ const navItems = [
   { label: 'Proyectos', href: '/proyectos' },
   { label: 'Software IA', href: '/software-ia' },
   { label: 'Servicios', href: '/servicios' },
-  { label: 'Contacto', href: '/contacto' },
+  { label: 'Precios', href: '/precios' }, { label: 'Contacto', href: '/contacto' },
 ]
 
 const WA = 'https://wa.me/523312499320?text=Hola%20ORBIT%20%F0%9F%91%8B%20Me%20interesa%20agendar%20una%20llamada.'
