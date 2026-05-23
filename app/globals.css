@@ -12,7 +12,7 @@
   --gray2: #2a2826;
 }
 
-* {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -20,22 +20,19 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   background: var(--black);
   color: var(--white);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.font-serif {
-  font-family: 'Cormorant Garamond', serif;
-}
-
-.font-sans {
-  font-family: 'DM Sans', sans-serif;
-}
-
+/* Typewriter cursor */
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -51,6 +48,7 @@ body {
   animation: blink 0.65s step-end infinite;
 }
 
+/* Word reveal */
 .word-reveal {
   display: inline-block;
   opacity: 0;
@@ -61,4 +59,16 @@ body {
 .word-reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Mobile global fixes */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Animaciones más rápidas en móvil */
+  .word-reveal {
+    transition: opacity 0.35s, transform 0.35s !important;
+  }
 }
