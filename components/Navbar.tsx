@@ -72,7 +72,7 @@ export default function Navbar() {
         onMouseLeave={e => (e.currentTarget.style.background = 'rgba(240,237,232,0.08)')}
         >
           Agendar llamada →
-        </button>
+        </a>
 
         {/* Mobile hamburger */}
         <button
@@ -86,7 +86,7 @@ export default function Navbar() {
           <span style={{ display: 'block', width: '22px', height: '1px', background: 'var(--white)', transform: menuOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none', transition: 'transform 0.3s' }} />
           <span style={{ display: 'block', width: '22px', height: '1px', background: 'var(--white)', opacity: menuOpen ? 0 : 1, transition: 'opacity 0.3s' }} />
           <span style={{ display: 'block', width: '22px', height: '1px', background: 'var(--white)', transform: menuOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none', transition: 'transform 0.3s' }} />
-        </button>
+        </a>
       </nav>
 
       {/* Mobile menu */}
@@ -126,7 +126,7 @@ export default function Navbar() {
           transition: 'opacity 0.4s 0.28s',
         }}>
           Agendar llamada →
-        </button>
+        </a>
       </div>
 
       <style>{`
