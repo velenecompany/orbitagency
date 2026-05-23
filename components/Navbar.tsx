@@ -1,5 +1,13 @@
 'use client'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
+
+const navItems = [
+  { label: 'Proyectos', href: '/proyectos' },
+  { label: 'Software IA', href: '#servicios' },
+  { label: 'Servicios', href: '#servicios' },
+  { label: 'Contacto', href: '#cta' },
+]
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -22,31 +30,31 @@ export default function Navbar() {
         borderBottom: scrolled ? '1px solid rgba(240,237,232,0.05)' : 'none',
         transition: 'background 0.4s, border 0.4s',
       }}>
-        <div style={{
+        <Link href="/" style={{
           fontFamily: "'DM Sans', sans-serif",
           fontSize: '12px', fontWeight: 500,
           letterSpacing: '5px', color: 'var(--white)',
-          textTransform: 'uppercase',
+          textTransform: 'uppercase', textDecoration: 'none',
         }}>
           Ō R B I T
-        </div>
+        </Link>
 
         {/* Desktop links */}
-        <ul style={{
-          display: 'flex', gap: '36px', listStyle: 'none',
-          margin: 0, padding: 0,
-        }} className="nav-desktop">
-          {['Proyectos', 'Software IA', 'Servicios', 'Contacto'].map(item => (
-            <li key={item}>
-              <a href="#" style={{
+        <ul style={{ display: 'flex', gap: '36px', listStyle: 'none' }} className="nav-desktop">
+          {navItems.map(item => (
+            <li key={item.label}>
+              <Link href={item.href} style={{
                 fontFamily: "'DM Sans', sans-serif",
-                fontSize: '10px', letterSpacing: '2.5px',
-                color: 'var(--white2)', textDecoration: 'none',
-                textTransform: 'uppercase', transition: 'color 0.2s',
+                fontSize: '10px', fontWeight: 400,
+                letterSpacing: '2.5px', color: 'var(--white2)',
+                textDecoration: 'none', textTransform: 'uppercase',
+                transition: 'color 0.2s',
               }}
               onMouseEnter={e => (e.currentTarget.style.color = 'var(--white)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--white2)')}
-              >{item}</a>
+              >
+                {item.label}
+              </Link>
             </li>
           ))}
         </ul>
@@ -75,24 +83,9 @@ export default function Navbar() {
             display: 'flex', flexDirection: 'column', gap: '5px', padding: '4px',
           }}
         >
-          <span style={{
-            display: 'block', width: '22px', height: '1px',
-            background: 'var(--white)',
-            transform: menuOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none',
-            transition: 'transform 0.3s',
-          }} />
-          <span style={{
-            display: 'block', width: '22px', height: '1px',
-            background: 'var(--white)',
-            opacity: menuOpen ? 0 : 1,
-            transition: 'opacity 0.3s',
-          }} />
-          <span style={{
-            display: 'block', width: '22px', height: '1px',
-            background: 'var(--white)',
-            transform: menuOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none',
-            transition: 'transform 0.3s',
-          }} />
+          <span style={{ display: 'block', width: '22px', height: '1px', background: 'var(--white)', transform: menuOpen ? 'rotate(45deg) translate(4px, 4px)' : 'none', transition: 'transform 0.3s' }} />
+          <span style={{ display: 'block', width: '22px', height: '1px', background: 'var(--white)', opacity: menuOpen ? 0 : 1, transition: 'opacity 0.3s' }} />
+          <span style={{ display: 'block', width: '22px', height: '1px', background: 'var(--white)', transform: menuOpen ? 'rotate(-45deg) translate(4px, -4px)' : 'none', transition: 'transform 0.3s' }} />
         </button>
       </nav>
 
@@ -106,8 +99,8 @@ export default function Navbar() {
         pointerEvents: menuOpen ? 'all' : 'none',
         transition: 'opacity 0.4s',
       }}>
-        {['Proyectos', 'Software IA', 'Servicios', 'Contacto'].map((item, i) => (
-          <a key={item} href="#"
+        {navItems.map((item, i) => (
+          <Link key={item.label} href={item.href}
             onClick={() => setMenuOpen(false)}
             style={{
               fontFamily: "'Cormorant Garamond', serif",
@@ -118,7 +111,9 @@ export default function Navbar() {
               transform: menuOpen ? 'translateY(0)' : 'translateY(20px)',
               transition: `opacity 0.4s ${i * 0.07}s, transform 0.4s ${i * 0.07}s`,
             }}
-          >{item}</a>
+          >
+            {item.label}
+          </Link>
         ))}
         <button style={{
           background: 'rgba(240,237,232,0.08)',
