@@ -148,13 +148,13 @@ export default function Proyectos() {
                         {[0,1,2].map(j => <div key={j} style={{ width: isMobile ? '14px' : '20px', height: '3px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px' }} />)}
                       </div>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', padding: '10px', textAlign: 'center', marginTop: '12px', position: 'relative' }}>
+                    {!(proj as any).image && <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', padding: '10px', textAlign: 'center', marginTop: '12px', position: 'relative' }}>
                       <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: isMobile ? '16px' : '22px', fontWeight: 300, letterSpacing: '-0.5px', color: 'rgba(240,237,232,0.88)', lineHeight: 1.1 }}>
                         {proj.headline.split('\n').map((l, j, arr) => <span key={j}>{l}{j < arr.length - 1 && <br />}</span>)}
                       </div>
                       {!isMobile && <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '9px', color: 'rgba(240,237,232,0.28)', letterSpacing: '1px' }}>Descubre más</div>}
                       <div style={{ background: 'rgba(240,237,232,0.08)', border: '1px solid rgba(240,237,232,0.12)', color: 'rgba(240,237,232,0.6)', fontFamily: "'DM Sans',sans-serif", fontSize: '8px', padding: isMobile ? '4px 10px' : '5px 14px', borderRadius: '100px', letterSpacing: '1px' }}>Ver más</div>
-                    </div>
+                    </div>}
                     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'rgba(255,255,255,0.03)' }}>
                       {[0,1,2].map(j => <div key={j} style={{ height: isMobile ? '24px' : '36px', background: 'rgba(255,255,255,0.015)' }} />)}
                     </div>
