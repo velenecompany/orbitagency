@@ -141,6 +141,7 @@ export default function Proyectos() {
                   {/* Screen */}
                   <div style={{ height: `${screenH}px`, background: proj.bg, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
                     <div style={{ position: 'absolute', inset: 0, background: proj.overlay }} />
+                  {(proj as any).image && <img src={(proj as any).image} alt={proj.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.95 }} />}
                     <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: isMobile ? '28px' : '34px', background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `0 ${isMobile ? 10 : 14}px`, borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                       <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: isMobile ? '10px' : '12px', fontWeight: 300, color: 'rgba(240,237,232,0.75)', letterSpacing: '2px' }}>{proj.logo}</span>
                       <div style={{ display: 'flex', gap: '8px' }}>
