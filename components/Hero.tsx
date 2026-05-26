@@ -165,8 +165,8 @@ export default function Hero() {
               transition: 'opacity 1.6s 0.6s',
             }}
           >
-            <source src="https://res.cloudinary.com/dzepodq0d/video/upload/inicio_mf_2026-05-25_a_la_s_2.23.15_p.m._uiskjc.mp4" type="video/mp4" />
-            <source src="https://res.cloudinary.com/dzepodq0d/video/upload/inicio_mf_2026-05-25_a_la_s_2.23.15_p.m._uiskjc.mov" type="video/quicktime" />
+            <source src="https://res.cloudinary.com/dzepodq0d/video/upload/orbit-hero.mp4" type="video/mp4" />
+            <source src="https://res.cloudinary.com/dzepodq0d/video/upload/orbit-hero.mov" type="video/quicktime" />
           </video>
         </div>
       </div>
