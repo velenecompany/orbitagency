@@ -65,7 +65,7 @@ export default function Hero() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 clamp(20px,5vw,56px)', position: 'relative', overflow: 'hidden' }}>
 
-      <video autoPlay muted loop playsInline style={{ position: 'absolute', right: 0, top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: showVideo ? 0.4 : 0, transition: 'opacity 2s ease', zIndex: 0 }}>
+      <video autoPlay muted loop playsInline style={{ position: 'absolute', right: 0, top: 0, left: 0, width: '100%', height: '100%', objectFit: 'contain', opacity: showVideo ? 0.4 : 0, transition: 'opacity 2s ease', zIndex: 0 }}>
         <source src="https://res.cloudinary.com/dzepodq0d/video/upload/v1779908059/kling_20260528_%E4%BD%9C%E5%93%81_Ultra_cine_715_0_hxpnae.mp4" type="video/mp4" />
       </video>
 
