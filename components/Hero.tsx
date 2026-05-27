@@ -190,7 +190,7 @@ export default function Hero() {
               textDecoration: 'none',
             }}
           >
-            Iniciar proyecto ->
+            Iniciar proyecto
           </a>
         </div>
       </div>
