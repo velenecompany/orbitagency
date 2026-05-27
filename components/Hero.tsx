@@ -2,10 +2,10 @@
 import { useEffect, useRef, useState } from 'react'
 
 function SmallSphere({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
-  const size = 24
+  const size = 36
   const cx = size / 2
   const cy = size / 2
-  const r = 9
+  const r = 13
   const nodes: {x:number;y:number;z:number}[] = []
   const count = 40
   for (let i = 0; i < count; i++) {
