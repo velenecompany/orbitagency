@@ -208,7 +208,7 @@ export default function Hero() {
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
         .sphere-bounce { will-change: left, top; }
         @media(max-width:768px) { .sphere-bounce { display: none; } .cursor-sphere { display: none; } }
-        .cursor-sphere { transform: translate(-50%, -50%) scale(0.15); }
+        .cursor-sphere { transform: translate(-50%, -50%) scale(0.06); }
       `}</style>
     </div>
   )
