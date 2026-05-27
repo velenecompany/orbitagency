@@ -1,7 +1,7 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-function useTypewriter(lines:{text:string;italic?:boolean}[], speed:number, start:boolean) {
+function useTypewriter(lines: {text:string;italic?:boolean}[], speed: number, start: boolean) {
   const [displayed, setDisplayed] = useState<{text:string;italic?:boolean}[]>([])
   const [currentLine, setCurrentLine] = useState(0)
   const [currentChar, setCurrentChar] = useState(0)
@@ -36,11 +36,51 @@ function useTypewriter(lines:{text:string;italic?:boolean}[], speed:number, star
   return { displayed, done }
 }
 
+function Sphere({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
+  const size = 420
+  const cx = size / 2
+  const cy = size / 2
+  const r = 160
+  const nodes: {x:number;y:number;z:number}[] = []
+  const count = 80
+  for (let i = 0; i < count; i++) {
+    const phi = Math.acos(-1 + (2 * i) / count)
+    const theta = Math.sqrt(count * Math.PI) * phi
+    const ox = Math.sin(phi) * Math.cos(theta)
+    const oy = Math.sin(phi) * Math.sin(theta)
+    const oz = Math.cos(phi)
+    const rx = mouseX * 0.3
+    const ry = mouseY * 0.3
+    const cosRx = Math.cos(ry), sinRx = Math.sin(ry)
+    const cosRy = Math.cos(rx), sinRy = Math.sin(rx)
+    const y1 = oy * cosRx - oz * sinRx
+    const z1 = oy * sinRx + oz * cosRx
+    const x2 = ox * cosRy + z1 * sinRy
+    const z2 = -ox * sinRy + z1 * cosRy
+    nodes.push({ x: cx + x2 * r, y: cy + y1 * r, z: z2 })
+  }
+  nodes.sort((a, b) => a.z - b.z)
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: 'visible' }}>
+      {nodes.map((n, i) => {
+        const t = (n.z + 1) / 2
+        const opacity = 0.08 + t * 0.55
+        const nodeR = 1.2 + t * 1.8
+        return <circle key={i} cx={n.x} cy={n.y} r={nodeR} fill="rgba(240,237,232,1)" opacity={opacity} />
+      })}
+    </svg>
+  )
+}
+
 export default function Hero() {
   const [started, setStarted] = useState(false)
   const [showSub, setShowSub] = useState(false)
   const [showBtn, setShowBtn] = useState(false)
-  const [showVideo, setShowVideo] = useState(false)
+  const [showSphere, setShowSphere] = useState(false)
+  const [mouse, setMouse] = useState({ x: 0, y: 0 })
+  const targetMouse = useRef({ x: 0, y: 0 })
+  const currentMouse = useRef({ x: 0, y: 0 })
+  const rafRef = useRef<number>(0)
 
   const lines = [
     { text: 'Hechos para' },
@@ -51,7 +91,7 @@ export default function Hero() {
 
   useEffect(() => {
     const t1 = setTimeout(() => setStarted(true), 400)
-    const t2 = setTimeout(() => setShowVideo(true), 300)
+    const t2 = setTimeout(() => setShowSphere(true), 600)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 
@@ -62,16 +102,29 @@ export default function Hero() {
     }
   }, [done])
 
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      targetMouse.current = {
+        x: (e.clientX / window.innerWidth - 0.5) * 2,
+        y: (e.clientY / window.innerHeight - 0.5) * 2,
+      }
+    }
+    window.addEventListener('mousemove', handleMove)
+    const animate = () => {
+      currentMouse.current.x += (targetMouse.current.x - currentMouse.current.x) * 0.04
+      currentMouse.current.y += (targetMouse.current.y - currentMouse.current.y) * 0.04
+      setMouse({ x: currentMouse.current.x, y: currentMouse.current.y })
+      rafRef.current = requestAnimationFrame(animate)
+    }
+    rafRef.current = requestAnimationFrame(animate)
+    return () => {
+      window.removeEventListener('mousemove', handleMove)
+      cancelAnimationFrame(rafRef.current)
+    }
+  }, [])
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 clamp(20px,5vw,56px)', position: 'relative', overflow: 'hidden' }}>
-
-      <video autoPlay muted loop playsInline className="hero-video" style={{ position: 'absolute', right: 0, top: 0, width: '45%', height: '100%', objectFit: 'cover', opacity: showVideo ? 0.85 : 0, transition: 'opacity 2s ease', zIndex: 0 }}>
-        <source src="https://res.cloudinary.com/dzepodq0d/video/upload/v1779908059/kling_20260528_%E4%BD%9C%E5%93%81_Ultra_cine_715_0_hxpnae.mp4" type="video/mp4" />
-      </video>
-
-      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '55%', background: 'linear-gradient(90deg, #090909 50%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: '40%', background: 'linear-gradient(0deg, #090909 0%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: '20%', background: 'linear-gradient(180deg, #090909 0%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
 
       <div style={{ flex: 1, maxWidth: '680px', paddingTop: '80px', zIndex: 2, position: 'relative' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontFamily: "'DM Sans', sans-serif", fontSize: '10px', letterSpacing: '3px', color: 'var(--white2)', textTransform: 'uppercase', marginBottom: '44px', opacity: started ? 1 : 0, transform: started ? 'translateY(0)' : 'translateY(16px)', transition: 'opacity 0.8s 0.3s, transform 0.8s 0.3s' }}>
@@ -98,10 +151,15 @@ export default function Hero() {
         </a>
       </div>
 
+      <div className="sphere-wrap" style={{ opacity: showSphere ? 1 : 0, transition: 'opacity 1.5s 0.5s' }}>
+        <Sphere mouseX={mouse.x} mouseY={mouse.y} />
+      </div>
+
       <style>{`
         .tw-cursor { display: inline-block; width: 2px; height: 0.85em; background: var(--white); margin-left: 4px; vertical-align: middle; animation: blink 1s step-end infinite; }
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
-        @media(min-width:769px) { .hero-video { display: none; } } @media(max-width:768px) { .hero-video { position: relative; width: 100%; height: 300px; opacity: 0.6; } }
+        .sphere-wrap { position: absolute; right: clamp(-60px, -2vw, -20px); top: 50%; transform: translateY(-50%); pointer-events: none; }
+        @media(max-width:768px) { .sphere-wrap { display: none; } }
       `}</style>
     </div>
   )
