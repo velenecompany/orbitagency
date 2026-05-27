@@ -19,6 +19,7 @@ export default function Proyectos() {
     'Integración Stripe Checkout con webhooks para órdenes y upgrades de tier automáticos',
     'Drops limitados con página de colecciones, cuenta de cliente y página de fundadores',
     'Dashboard interno de operaciones, programa de distribuidores y portal de socios',
+    'Chatbot IA integrado para atención al cliente y resolución de dudas en tiempo real',
   ]
 
   return (
