@@ -115,7 +115,7 @@ export default function Hero() {
         <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(56px,8vw,108px)', fontWeight: 300, lineHeight: 0.93, letterSpacing: '-2px', color: 'var(--white)', minHeight: '1.9em' }}>
           {text1}<br />
           <em style={{ fontStyle: 'italic' }}>{text2}</em>
-          {phase < 2 || text2.length < line2.length ? <span className="tw-cursor" /> : null}
+          {text2.length < line2.length || (phase === 1 && text1.length < line1.length) ? <span className="tw-cursor" /> : null}
         </h1>
 
         <p style={{ maxWidth: '420px', color: 'var(--white2)', fontSize: 'clamp(13px,2vw,15px)', lineHeight: 1.8, marginTop: '36px', fontWeight: 300, fontFamily: "'DM Sans', sans-serif", opacity: showSub ? 1 : 0, transform: showSub ? 'translateY(0)' : 'translateY(20px)', transition: 'opacity 0.8s, transform 0.8s' }}>
