@@ -42,7 +42,7 @@ export default function Contacto() {
   const handleWhatsapp = () => {
     if (!name || !business || !service) return
     const msg = encodeURIComponent(
-      `Hola ŌRBIT 👋\n\nMi nombre es *${name}*.\nTengo una empresa de *${business}*.\nMe interesa: *${service}*.\n\n¿Podemos hablar?`
+      `Hola VANT Studio 👋\n\nMi nombre es *${name}*.\nTengo una empresa de *${business}*.\nMe interesa: *${service}*.\n\n¿Podemos hablar?`
     )
     window.open(`https://wa.me/${whatsappNumber}?text=${msg}`, '_blank')
     setSent(true)
@@ -58,7 +58,7 @@ export default function Contacto() {
 
       {/* NAV */}
       <nav style={{ position:'fixed', top:0, left:0, right:0, zIndex:200, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'clamp(16px,3vw,24px) clamp(20px,5vw,56px)', background:'rgba(9,9,9,0.92)', backdropFilter:'blur(20px)', borderBottom:'1px solid rgba(240,237,232,0.05)' }}>
-        <Link href="/" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:'12px', fontWeight:500, letterSpacing:'5px', color:s.white, textTransform:'uppercase', textDecoration:'none' }}>Ō R B I T</Link>
+        <Link href="/" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:'12px', fontWeight:500, letterSpacing:'5px', color:s.white, textTransform:'uppercase', textDecoration:'none' }}>V A N T</Link>
         <Link href="/" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:'10px', letterSpacing:'2px', color:s.white2, textDecoration:'none', textTransform:'uppercase' }}>← Volver</Link>
       </nav>
 
@@ -180,7 +180,7 @@ export default function Contacto() {
               height="620"
               frameBorder="0"
               style={{ display:'block' }}
-              title="Agendar llamada con ŌRBIT"
+              title="Agendar llamada con VANT Studio"
             />
           </div>
         </div>
@@ -204,8 +204,8 @@ export default function Contacto() {
       </div>
 
       <footer style={{ padding:'32px clamp(20px,5vw,56px)', borderTop:'1px solid rgba(240,237,232,0.05)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-        <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:'11px', letterSpacing:'5px', textTransform:'uppercase', color:s.white2 }}>Ō R B I T</div>
-        <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:'10px', color:s.gray2, letterSpacing:'1px' }}>© 2025 ŌRBIT.</div>
+        <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:'11px', letterSpacing:'5px', textTransform:'uppercase', color:s.white2 }}>V A N T</div>
+        <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:'10px', color:s.gray2, letterSpacing:'1px' }}>© 2025 VANT Studio.</div>
       </footer>
 
       <style>{`

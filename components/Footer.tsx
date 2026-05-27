@@ -14,7 +14,7 @@ export default function Footer() {
             letterSpacing: '5px', textTransform: 'uppercase',
             color: 'var(--white2)',
           }}>
-            Ō R B I T
+            V A N T
           </div>
 
           <div className="footer-links">
@@ -37,7 +37,7 @@ export default function Footer() {
             fontSize: '10px', color: 'var(--gray2)',
             letterSpacing: '1px', fontFamily: "'DM Sans',sans-serif",
           }}>
-            © 2025 ŌRBIT
+            © 2025 VANT Studio
           </div>
         </div>
       </footer>

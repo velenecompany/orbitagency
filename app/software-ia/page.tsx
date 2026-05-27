@@ -7,7 +7,7 @@ interface Message {
   content: string
 }
 
-const SYSTEM_PROMPT = `Eres el asistente de ventas de ŌRBIT, una agencia premium de desarrollo web e inteligencia artificial basada en Guadalajara, México.
+const SYSTEM_PROMPT = `Eres el asistente de ventas de VANT Studio, una agencia premium de desarrollo web e inteligencia artificial basada en Guadalajara, México.
 
 Tu personalidad:
 - Profesional pero cercano
@@ -16,7 +16,7 @@ Tu personalidad:
 - Siempre enfocas las respuestas en ROI y resultados reales
 - Nunca eres genérico, siempre das ejemplos concretos
 
-Servicios de ŌRBIT:
+Servicios de VANT Studio:
 1. Agente IA para WhatsApp — responde, califica y agenda prospectos automáticamente 24/7
 2. Chatbot IA para sitios web — convierte visitantes en clientes
 3. Sistema de calificación de leads — filtra y prioriza prospectos automáticamente
@@ -43,7 +43,7 @@ export default function SoftwareIA() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: '¡Hola! Soy el asistente de ŌRBIT. Cuéntame sobre tu negocio — ¿qué tipo de empresa tienes y qué proceso te gustaría automatizar?'
+      content: '¡Hola! Soy el asistente de VANT Studio. Cuéntame sobre tu negocio — ¿qué tipo de empresa tienes y qué proceso te gustaría automatizar?'
     }
   ])
   const [input, setInput] = useState('')
@@ -102,7 +102,7 @@ export default function SoftwareIA() {
       {/* NAV */}
       <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'clamp(16px,3vw,24px) clamp(20px,5vw,56px)', background: 'rgba(9,9,9,0.92)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(240,237,232,0.05)' }}>
         <Link href="/" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', fontWeight: 500, letterSpacing: '5px', color: s.white, textTransform: 'uppercase', textDecoration: 'none' }}>
-          Ō R B I T
+          V A N T
         </Link>
         <Link href="/" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', letterSpacing: '2px', color: s.white2, textDecoration: 'none', textTransform: 'uppercase' }}>
           ← Volver
@@ -137,7 +137,7 @@ export default function SoftwareIA() {
               <div style={{ position: 'absolute', bottom: '2px', right: '2px', width: '7px', height: '7px', background: '#4ade80', borderRadius: '50%', border: `1px solid ${s.black}` }} />
             </div>
             <div>
-              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', fontWeight: 500, color: s.white }}>Agente ŌRBIT</div>
+              <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', fontWeight: 500, color: s.white }}>Agente VANT Studio</div>
               <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', color: '#4ade80', letterSpacing: '1px' }}>● En línea ahora</div>
             </div>
           </div>

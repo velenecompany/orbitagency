@@ -232,7 +232,7 @@ export default function Hero() {
           Un studio <strong style={{ color: 'var(--white)', fontWeight: 400 }}>nativo en IA</strong> que construye plataformas web y sistemas inteligentes sobre el stack de frontera.
         </p>
 
-        <a href="https://wa.me/523312499320?text=Hola%20ORBIT" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'rgba(240,237,232,0.07)', border: '1px solid rgba(240,237,232,0.12)', color: 'var(--white)', fontFamily: "'DM Sans', sans-serif", fontSize: '12px', padding: '15px 28px', marginTop: '44px', borderRadius: '100px', opacity: showBtn ? 1 : 0, transform: showBtn ? 'translateY(0)' : 'translateY(16px)', transition: 'opacity 0.8s, transform 0.8s', textDecoration: 'none' }}>
+        <a href="https://wa.me/523312499320?text=Hola%20VANT Studio" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'rgba(240,237,232,0.07)', border: '1px solid rgba(240,237,232,0.12)', color: 'var(--white)', fontFamily: "'DM Sans', sans-serif", fontSize: '12px', padding: '15px 28px', marginTop: '44px', borderRadius: '100px', opacity: showBtn ? 1 : 0, transform: showBtn ? 'translateY(0)' : 'translateY(16px)', transition: 'opacity 0.8s, transform 0.8s', textDecoration: 'none' }}>
           Iniciar proyecto
         </a>
       </div>

@@ -9,7 +9,7 @@ const navItems = [
   { label: 'Precios', href: '/precios' }, { label: 'Contacto', href: '/contacto' },
 ]
 
-const WA = 'https://wa.me/523312499320?text=Hola%20ORBIT%20%F0%9F%91%8B%20Me%20interesa%20agendar%20una%20llamada.'
+const WA = 'https://wa.me/523312499320?text=Hola%20VANT Studio%20%F0%9F%91%8B%20Me%20interesa%20agendar%20una%20llamada.'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -36,7 +36,7 @@ export default function Navbar() {
           fontFamily: "'DM Sans', sans-serif", fontSize: '12px', fontWeight: 500,
           letterSpacing: '5px', color: 'var(--white)', textTransform: 'uppercase', textDecoration: 'none',
         }}>
-          Ō R B I T
+          V A N T
         </Link>
 
         <ul style={{ display: 'flex', gap: '36px', listStyle: 'none' }} className="nav-desktop">

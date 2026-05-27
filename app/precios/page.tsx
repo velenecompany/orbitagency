@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
-const WA = 'https://wa.me/523312499320?text=Hola%20ORBIT%20%F0%9F%91%8B%20Me%20interesa%20el%20plan%20'
+const WA = 'https://wa.me/523312499320?text=Hola%20VANT Studio%20%F0%9F%91%8B%20Me%20interesa%20el%20plan%20'
 
 const plans = [
   {
@@ -52,7 +52,7 @@ const plans = [
   },
 ]
 
-const SYSTEM_PROMPT = `Eres el asistente de precios de ŌRBIT, una agencia de desarrollo web e IA en Guadalajara, México.
+const SYSTEM_PROMPT = `Eres el asistente de precios de VANT Studio, una agencia de desarrollo web e IA en Guadalajara, México.
 
 Tu rol es explicar de forma simple y clara qué significa cada herramienta o servicio que ofrecemos.
 
@@ -93,7 +93,7 @@ const s = {
 export default function Precios() {
   const [started, setStarted] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: '¡Hola! Soy el asistente de ŌRBIT. Si tienes dudas sobre algún plan o no entiendes qué incluye alguna herramienta, aquí estoy. ¿En qué te ayudo?' }
+    { role: 'assistant', content: '¡Hola! Soy el asistente de VANT Studio. Si tienes dudas sobre algún plan o no entiendes qué incluye alguna herramienta, aquí estoy. ¿En qué te ayudo?' }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -145,7 +145,7 @@ export default function Precios() {
 
       {/* NAV */}
       <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 'clamp(16px,3vw,24px) clamp(20px,5vw,56px)', background: 'rgba(9,9,9,0.92)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(240,237,232,0.05)' }}>
-        <Link href="/" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', fontWeight: 500, letterSpacing: '5px', color: s.white, textTransform: 'uppercase', textDecoration: 'none' }}>Ō R B I T</Link>
+        <Link href="/" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', fontWeight: 500, letterSpacing: '5px', color: s.white, textTransform: 'uppercase', textDecoration: 'none' }}>V A N T</Link>
         <Link href="/" style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', letterSpacing: '2px', color: s.white2, textDecoration: 'none', textTransform: 'uppercase' }}>← Volver</Link>
       </nav>
 
@@ -241,8 +241,8 @@ export default function Precios() {
       </div>
 
       <footer style={{ padding: '32px clamp(20px,5vw,56px)', borderTop: '1px solid rgba(240,237,232,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', letterSpacing: '5px', textTransform: 'uppercase', color: s.white2 }}>Ō R B I T</div>
-        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', color: s.gray2, letterSpacing: '1px' }}>© 2025 ŌRBIT.</div>
+        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '11px', letterSpacing: '5px', textTransform: 'uppercase', color: s.white2 }}>V A N T</div>
+        <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', color: s.gray2, letterSpacing: '1px' }}>© 2025 VANT Studio.</div>
       </footer>
 
       {/* CHATBOT FLOTANTE */}
@@ -263,7 +263,7 @@ export default function Precios() {
                 <div style={{ position: 'absolute', bottom: '1px', right: '1px', width: '6px', height: '6px', background: '#4ade80', borderRadius: '50%', border: `1px solid #0f0f0f` }} />
               </div>
               <div>
-                <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', fontWeight: 500, color: s.white }}>Asistente ŌRBIT</div>
+                <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '12px', fontWeight: 500, color: s.white }}>Asistente VANT Studio</div>
                 <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: '10px', color: '#4ade80' }}>● En línea</div>
               </div>
               <button onClick={() => setChatOpen(false)} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: s.gray, cursor: 'pointer', fontSize: '18px', lineHeight: 1 }}>×</button>
