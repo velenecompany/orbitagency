@@ -165,8 +165,10 @@ export default function Hero() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 clamp(20px,5vw,56px)', position: 'relative', overflow: 'hidden' }}>
 
-      <div style={{ position: 'fixed', left: cursorPos.x, top: cursorPos.y, transform: 'translate(-50%, -50%)', pointerEvents: 'none', zIndex: 999, opacity: 0.5 }} className="cursor-sphere">
-        <Sphere mouseX={mouse.x} mouseY={mouse.y} />
+      <div style={{ position: 'fixed', left: cursorPos.x, top: cursorPos.y, transform: 'translate(-50%, -50%)', pointerEvents: 'none', zIndex: 999, opacity: 0.7, width: '24px', height: '24px', overflow: 'hidden' }} className="cursor-sphere">
+        <div style={{ transform: 'scale(0.063)', transformOrigin: 'top left', width: '380px', height: '380px' }}>
+          <Sphere mouseX={mouse.x} mouseY={mouse.y} />
+        </div>
       </div>
 
       <div className="sphere-bounce" style={{
@@ -208,7 +210,7 @@ export default function Hero() {
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
         .sphere-bounce { will-change: left, top; }
         @media(max-width:768px) { .sphere-bounce { display: none; } .cursor-sphere { display: none; } }
-        .cursor-sphere { transform: translate(-50%, -50%) scale(0.06); }
+        
       `}</style>
     </div>
   )
