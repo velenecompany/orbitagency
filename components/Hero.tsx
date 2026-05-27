@@ -35,6 +35,40 @@ function SmallSphere({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
   )
 }
 
+function SmallSphere({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
+  const size = 24
+  const cx = size / 2
+  const cy = size / 2
+  const r = 9
+  const nodes: {x:number;y:number;z:number}[] = []
+  const count = 40
+  for (let i = 0; i < count; i++) {
+    const phi = Math.acos(-1 + (2 * i) / count)
+    const theta = Math.sqrt(count * Math.PI) * phi
+    const ox = Math.sin(phi) * Math.cos(theta)
+    const oy = Math.sin(phi) * Math.sin(theta)
+    const oz = Math.cos(phi)
+    const rx = mouseX * 0.4
+    const ry = mouseY * 0.4
+    const cosRx = Math.cos(ry), sinRx = Math.sin(ry)
+    const cosRy = Math.cos(rx), sinRy = Math.sin(rx)
+    const y1 = oy * cosRx - oz * sinRx
+    const z1 = oy * sinRx + oz * cosRx
+    const x2 = ox * cosRy + z1 * sinRy
+    const z2 = -ox * sinRy + z1 * cosRy
+    nodes.push({ x: cx + x2 * r, y: cy + y1 * r, z: z2 })
+  }
+  nodes.sort((a, b) => a.z - b.z)
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      {nodes.map((n, i) => {
+        const t = (n.z + 1) / 2
+        return <circle key={i} cx={n.x} cy={n.y} r={0.3 + t * 0.8} fill="rgba(240,237,232,1)" opacity={0.1 + t * 0.7} />
+      })}
+    </svg>
+  )
+}
+
 function Sphere({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
   const size = 380
   const cx = size / 2
