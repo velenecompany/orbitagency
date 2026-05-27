@@ -54,6 +54,10 @@ export default function Hero() {
   const targetMouse = useRef({ x: 0, y: 0 })
   const smoothMouse = useRef({ x: 0, y: 0 })
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
+  const [cursorPos, setCursorPos] = useState({ x: -500, y: -500 })
+  const targetCursor = useRef({ x: -500, y: -500 })
+  const smoothCursor = useRef({ x: -500, y: -500 })
+  const rafCursor = useRef<number>(0)
   const rafMouse = useRef<number>(0)
 
   const line1 = 'Hechos para'
@@ -136,15 +140,34 @@ export default function Hero() {
     }
     rafBounce.current = requestAnimationFrame(animateBounce)
 
+    const animateCursor = () => {
+      smoothCursor.current.x += (targetCursor.current.x - smoothCursor.current.x) * 0.12
+      smoothCursor.current.y += (targetCursor.current.y - smoothCursor.current.y) * 0.12
+      setCursorPos({ x: smoothCursor.current.x, y: smoothCursor.current.y })
+      rafCursor.current = requestAnimationFrame(animateCursor)
+    }
+    rafCursor.current = requestAnimationFrame(animateCursor)
+
+    const updateCursor = (e: MouseEvent) => {
+      targetCursor.current = { x: e.clientX, y: e.clientY }
+    }
+    window.addEventListener('mousemove', updateCursor)
+
     return () => {
       window.removeEventListener('mousemove', handleMove)
+      window.removeEventListener('mousemove', updateCursor)
       cancelAnimationFrame(rafMouse.current)
       cancelAnimationFrame(rafBounce.current)
+      cancelAnimationFrame(rafCursor.current)
     }
   }, [])
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 clamp(20px,5vw,56px)', position: 'relative', overflow: 'hidden' }}>
+
+      <div style={{ position: 'fixed', left: cursorPos.x, top: cursorPos.y, transform: 'translate(-50%, -50%)', pointerEvents: 'none', zIndex: 999, opacity: 0.5 }} className="cursor-sphere">
+        <Sphere mouseX={mouse.x} mouseY={mouse.y} />
+      </div>
 
       <div className="sphere-bounce" style={{
         position: 'absolute',
@@ -184,7 +207,8 @@ export default function Hero() {
         .tw-cursor { display: inline-block; width: 2px; height: 0.85em; background: var(--white); margin-left: 4px; vertical-align: middle; animation: blink 1s step-end infinite; }
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
         .sphere-bounce { will-change: left, top; }
-        @media(max-width:768px) { .sphere-bounce { display: none; } }
+        @media(max-width:768px) { .sphere-bounce { display: none; } .cursor-sphere { display: none; } }
+        .cursor-sphere { transform: translate(-50%, -50%) scale(0.4); }
       `}</style>
     </div>
   )
