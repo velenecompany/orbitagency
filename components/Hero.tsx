@@ -1,41 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 
-function useTypewriter(lines: {text:string;italic?:boolean}[], speed: number, start: boolean) {
-  const [displayed, setDisplayed] = useState<{text:string;italic?:boolean}[]>([])
-  const [currentLine, setCurrentLine] = useState(0)
-  const [currentChar, setCurrentChar] = useState(0)
-  const [done, setDone] = useState(false)
-
-  useEffect(() => {
-    if (!start || currentLine >= lines.length) {
-      if (currentLine >= lines.length) setDone(true)
-      return
-    }
-    const line = lines[currentLine]
-    if (currentChar < line.text.length) {
-      const timeout = setTimeout(() => {
-        setDisplayed(prev => {
-          const updated = [...prev]
-          if (!updated[currentLine]) updated[currentLine] = { text: '', italic: line.italic }
-          updated[currentLine] = { ...updated[currentLine], text: updated[currentLine].text + line.text[currentChar] }
-          return updated
-        })
-        setCurrentChar(c => c + 1)
-      }, speed + Math.random() * speed * 0.35)
-      return () => clearTimeout(timeout)
-    } else {
-      const timeout = setTimeout(() => {
-        setCurrentLine(l => l + 1)
-        setCurrentChar(0)
-      }, speed * 4)
-      return () => clearTimeout(timeout)
-    }
-  }, [start, currentLine, currentChar, lines, speed])
-
-  return { displayed, done }
-}
-
 function Sphere({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
   const size = 420
   const cx = size / 2
@@ -73,7 +38,9 @@ function Sphere({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
 }
 
 export default function Hero() {
-  const [started, setStarted] = useState(false)
+  const [text1, setText1] = useState('')
+  const [text2, setText2] = useState('')
+  const [phase, setPhase] = useState(0)
   const [showSub, setShowSub] = useState(false)
   const [showBtn, setShowBtn] = useState(false)
   const [showSphere, setShowSphere] = useState(false)
@@ -82,25 +49,38 @@ export default function Hero() {
   const currentMouse = useRef({ x: 0, y: 0 })
   const rafRef = useRef<number>(0)
 
-  const lines = [
-    { text: 'Hechos para' },
-    { text: 'ascender.', italic: true },
-  ]
-
-  const { displayed, done } = useTypewriter(lines, 52, started)
+  const line1 = 'Hechos para'
+  const line2 = 'ascender.'
 
   useEffect(() => {
-    const t1 = setTimeout(() => setStarted(true), 400)
-    const t2 = setTimeout(() => setShowSphere(true), 600)
-    return () => { clearTimeout(t1); clearTimeout(t2) }
+    setTimeout(() => setShowSphere(true), 600)
+    setTimeout(() => setPhase(1), 400)
   }, [])
 
   useEffect(() => {
-    if (done) {
-      setTimeout(() => setShowSub(true), 100)
-      setTimeout(() => setShowBtn(true), 400)
+    if (phase === 1) {
+      let i = 0
+      const t = setInterval(() => {
+        i++
+        setText1(line1.slice(0, i))
+        if (i >= line1.length) { clearInterval(t); setTimeout(() => setPhase(2), 200) }
+      }, 60)
+      return () => clearInterval(t)
     }
-  }, [done])
+    if (phase === 2) {
+      let i = 0
+      const t = setInterval(() => {
+        i++
+        setText2(line2.slice(0, i))
+        if (i >= line2.length) {
+          clearInterval(t)
+          setTimeout(() => setShowSub(true), 100)
+          setTimeout(() => setShowBtn(true), 400)
+        }
+      }, 60)
+      return () => clearInterval(t)
+    }
+  }, [phase])
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -127,19 +107,15 @@ export default function Hero() {
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 clamp(20px,5vw,56px)', position: 'relative', overflow: 'hidden' }}>
 
       <div style={{ flex: 1, maxWidth: '680px', paddingTop: '80px', zIndex: 2, position: 'relative' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontFamily: "'DM Sans', sans-serif", fontSize: '10px', letterSpacing: '3px', color: 'var(--white2)', textTransform: 'uppercase', marginBottom: '44px', opacity: started ? 1 : 0, transform: started ? 'translateY(0)' : 'translateY(16px)', transition: 'opacity 0.8s 0.3s, transform 0.8s 0.3s' }}>
-          <span style={{ display: 'block', height: '1px', background: 'var(--white2)', width: started ? '36px' : '0px', transition: 'width 1s 0.5s', flexShrink: 0 }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontFamily: "'DM Sans', sans-serif", fontSize: '10px', letterSpacing: '3px', color: 'var(--white2)', textTransform: 'uppercase', marginBottom: '44px', opacity: phase > 0 ? 1 : 0, transform: phase > 0 ? 'translateY(0)' : 'translateY(16px)', transition: 'opacity 0.8s 0.3s, transform 0.8s 0.3s' }}>
+          <span style={{ display: 'block', height: '1px', background: 'var(--white2)', width: phase > 0 ? '36px' : '0px', transition: 'width 1s 0.5s', flexShrink: 0 }} />
           Un studio nativo en IA
         </div>
 
         <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(56px,8vw,108px)', fontWeight: 300, lineHeight: 0.93, letterSpacing: '-2px', color: 'var(--white)', minHeight: '1.9em' }}>
-          {displayed.map((line, i) => (
-            <span key={i}>
-              {i > 0 && <br />}
-              <span style={{ fontStyle: line.italic ? 'italic' : 'normal' }}>{line.text}</span>
-            </span>
-          ))}
-          {!done && <span className="tw-cursor" />}
+          {text1}<br />
+          <em style={{ fontStyle: 'italic' }}>{text2}</em>
+          {phase < 2 || text2.length < line2.length ? <span className="tw-cursor" /> : null}
         </h1>
 
         <p style={{ maxWidth: '420px', color: 'var(--white2)', fontSize: 'clamp(13px,2vw,15px)', lineHeight: 1.8, marginTop: '36px', fontWeight: 300, fontFamily: "'DM Sans', sans-serif", opacity: showSub ? 1 : 0, transform: showSub ? 'translateY(0)' : 'translateY(20px)', transition: 'opacity 0.8s, transform 0.8s' }}>
