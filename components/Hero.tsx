@@ -46,7 +46,7 @@ export default function Hero() {
   const [showSphere, setShowSphere] = useState(false)
 
   const [spherePos, setSpherePos] = useState({ x: 0.75, y: 0.5 })
-  const vel = useRef({ x: 0.0018, y: 0.0012 })
+  const vel = useRef({ x: 0.003, y: 0.002 })
   const mouseInfluence = useRef({ x: 0, y: 0 })
   const rafBounce = useRef<number>(0)
   const sphereRef = useRef({ x: 0.75, y: 0.5 })
