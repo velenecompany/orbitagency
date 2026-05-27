@@ -66,7 +66,7 @@ export default function Hero() {
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 clamp(20px,5vw,56px)', position: 'relative', overflow: 'hidden' }}>
 
       <video autoPlay muted loop playsInline style={{ position: 'absolute', right: 0, top: 0, width: '55%', height: '100%', objectFit: 'cover', opacity: showVideo ? 0.6 : 0, transition: 'opacity 2s ease', zIndex: 0 }}>
-        <source src="https://res.cloudinary.com/dzepodq0d/video/upload/orbit-hero.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/dzepodq0d/video/upload/v1779908059/kling_20260528_%E4%BD%9C%E5%93%81_Ultra_cine_715_0_hxpnae.mp4" type="video/mp4" />
       </video>
 
       <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '60%', background: 'linear-gradient(90deg, #090909 40%, transparent 100%)', zIndex: 1, pointerEvents: 'none' }} />
