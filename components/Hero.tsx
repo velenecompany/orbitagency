@@ -2,10 +2,10 @@
 import { useEffect, useRef, useState } from 'react'
 
 function Sphere({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
-  const size = 420
+  const size = 380
   const cx = size / 2
   const cy = size / 2
-  const r = 160
+  const r = 150
   const nodes: {x:number;y:number;z:number}[] = []
   const count = 80
   for (let i = 0; i < count; i++) {
@@ -14,8 +14,8 @@ function Sphere({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
     const ox = Math.sin(phi) * Math.cos(theta)
     const oy = Math.sin(phi) * Math.sin(theta)
     const oz = Math.cos(phi)
-    const rx = mouseX * 0.3
-    const ry = mouseY * 0.3
+    const rx = mouseX * 0.4
+    const ry = mouseY * 0.4
     const cosRx = Math.cos(ry), sinRx = Math.sin(ry)
     const cosRy = Math.cos(rx), sinRy = Math.sin(rx)
     const y1 = oy * cosRx - oz * sinRx
@@ -44,10 +44,17 @@ export default function Hero() {
   const [showSub, setShowSub] = useState(false)
   const [showBtn, setShowBtn] = useState(false)
   const [showSphere, setShowSphere] = useState(false)
-  const [mouse, setMouse] = useState({ x: 0, y: 0 })
+
+  const [spherePos, setSpherePos] = useState({ x: 0.75, y: 0.5 })
+  const vel = useRef({ x: 0.0018, y: 0.0012 })
+  const mouseInfluence = useRef({ x: 0, y: 0 })
+  const rafBounce = useRef<number>(0)
+  const sphereRef = useRef({ x: 0.75, y: 0.5 })
+
   const targetMouse = useRef({ x: 0, y: 0 })
-  const currentMouse = useRef({ x: 0, y: 0 })
-  const rafRef = useRef<number>(0)
+  const smoothMouse = useRef({ x: 0, y: 0 })
+  const [mouse, setMouse] = useState({ x: 0, y: 0 })
+  const rafMouse = useRef<number>(0)
 
   const line1 = 'Hechos para'
   const line2 = 'ascender.'
@@ -88,23 +95,76 @@ export default function Hero() {
         x: (e.clientX / window.innerWidth - 0.5) * 2,
         y: (e.clientY / window.innerHeight - 0.5) * 2,
       }
+      const sx = sphereRef.current.x
+      const sy = sphereRef.current.y
+      const mx = e.clientX / window.innerWidth
+      const my = e.clientY / window.innerHeight
+      const dx = mx - sx
+      const dy = my - sy
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      if (dist < 0.25) {
+        const force = (0.25 - dist) * 0.003
+        vel.current.x += dx * force
+        vel.current.y += dy * force
+      }
     }
     window.addEventListener('mousemove', handleMove)
-    const animate = () => {
-      currentMouse.current.x += (targetMouse.current.x - currentMouse.current.x) * 0.04
-      currentMouse.current.y += (targetMouse.current.y - currentMouse.current.y) * 0.04
-      setMouse({ x: currentMouse.current.x, y: currentMouse.current.y })
-      rafRef.current = requestAnimationFrame(animate)
+
+    const animateMouse = () => {
+      smoothMouse.current.x += (targetMouse.current.x - smoothMouse.current.x) * 0.04
+      smoothMouse.current.y += (targetMouse.current.y - smoothMouse.current.y) * 0.04
+      setMouse({ x: smoothMouse.current.x, y: smoothMouse.current.y })
+      rafMouse.current = requestAnimationFrame(animateMouse)
     }
-    rafRef.current = requestAnimationFrame(animate)
+    rafMouse.current = requestAnimationFrame(animateMouse)
+
+    const animateBounce = () => {
+      sphereRef.current.x += vel.current.x
+      sphereRef.current.y += vel.current.y
+      const margin = 0.05
+      if (sphereRef.current.x < margin || sphereRef.current.x > 1 - margin) {
+        vel.current.x *= -1
+        sphereRef.current.x = Math.max(margin, Math.min(1 - margin, sphereRef.current.x))
+      }
+      if (sphereRef.current.y < margin || sphereRef.current.y > 1 - margin) {
+        vel.current.y *= -1
+        sphereRef.current.y = Math.max(margin, Math.min(1 - margin, sphereRef.current.y))
+      }
+      vel.current.x *= 0.999
+      vel.current.y *= 0.999
+      const speed = Math.sqrt(vel.current.x ** 2 + vel.current.y ** 2)
+      const minSpeed = 0.001
+      if (speed < minSpeed) {
+        vel.current.x = (vel.current.x / speed) * minSpeed
+        vel.current.y = (vel.current.y / speed) * minSpeed
+      }
+      setSpherePos({ x: sphereRef.current.x, y: sphereRef.current.y })
+      rafBounce.current = requestAnimationFrame(animateBounce)
+    }
+    rafBounce.current = requestAnimationFrame(animateBounce)
+
     return () => {
       window.removeEventListener('mousemove', handleMove)
-      cancelAnimationFrame(rafRef.current)
+      cancelAnimationFrame(rafMouse.current)
+      cancelAnimationFrame(rafBounce.current)
     }
   }, [])
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', padding: '0 clamp(20px,5vw,56px)', position: 'relative', overflow: 'hidden' }}>
+
+      <div className="sphere-bounce" style={{
+        position: 'absolute',
+        left: `${spherePos.x * 100}%`,
+        top: `${spherePos.y * 100}%`,
+        transform: 'translate(-50%, -50%)',
+        opacity: showSphere ? 1 : 0,
+        transition: 'opacity 1.5s 0.5s',
+        pointerEvents: 'none',
+        zIndex: 1,
+      }}>
+        <Sphere mouseX={mouse.x} mouseY={mouse.y} />
+      </div>
 
       <div style={{ flex: 1, maxWidth: '680px', paddingTop: '80px', zIndex: 2, position: 'relative' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontFamily: "'DM Sans', sans-serif", fontSize: '10px', letterSpacing: '3px', color: 'var(--white2)', textTransform: 'uppercase', marginBottom: '44px', opacity: phase > 0 ? 1 : 0, transform: phase > 0 ? 'translateY(0)' : 'translateY(16px)', transition: 'opacity 0.8s 0.3s, transform 0.8s 0.3s' }}>
@@ -127,15 +187,11 @@ export default function Hero() {
         </a>
       </div>
 
-      <div className="sphere-wrap" style={{ opacity: showSphere ? 1 : 0, transition: 'opacity 1.5s 0.5s' }}>
-        <Sphere mouseX={mouse.x} mouseY={mouse.y} />
-      </div>
-
       <style>{`
         .tw-cursor { display: inline-block; width: 2px; height: 0.85em; background: var(--white); margin-left: 4px; vertical-align: middle; animation: blink 1s step-end infinite; }
         @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
-        .sphere-wrap { position: absolute; right: clamp(-60px, -2vw, -20px); top: 50%; transform: translateY(-50%); pointer-events: none; }
-        @media(max-width:768px) { .sphere-wrap { display: none; } }
+        .sphere-bounce { will-change: left, top; }
+        @media(max-width:768px) { .sphere-bounce { display: none; } }
       `}</style>
     </div>
   )
