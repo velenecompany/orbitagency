@@ -130,14 +130,7 @@ export default function Hero() {
         vel.current.y *= -1
         sphereRef.current.y = Math.max(margin, Math.min(1 - margin, sphereRef.current.y))
       }
-      vel.current.x *= 0.999
-      vel.current.y *= 0.999
-      const speed = Math.sqrt(vel.current.x ** 2 + vel.current.y ** 2)
-      const minSpeed = 0.001
-      if (speed < minSpeed) {
-        vel.current.x = (vel.current.x / speed) * minSpeed
-        vel.current.y = (vel.current.y / speed) * minSpeed
-      }
+      
       setSpherePos({ x: sphereRef.current.x, y: sphereRef.current.y })
       rafBounce.current = requestAnimationFrame(animateBounce)
     }
