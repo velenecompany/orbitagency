@@ -103,7 +103,7 @@ export default function Hero() {
       const dy = my - sy
       const dist = Math.sqrt(dx * dx + dy * dy)
       if (dist < 0.25) {
-        const force = (0.25 - dist) * 0.003
+        const force = (0.25 - dist) * 0.008
         vel.current.x += dx * force
         vel.current.y += dy * force
       }
