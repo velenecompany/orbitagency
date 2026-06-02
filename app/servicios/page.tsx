@@ -244,10 +244,10 @@ export default function Servicios() {
         <p style={{ ...rv(cta.visible,.2), fontFamily:"'DM Sans',sans-serif", fontSize:'14px', color:s.gray, maxWidth:'360px', margin:'0 auto 44px', lineHeight:1.75, fontWeight:300 }}>
           30 minutos. Sin compromiso. Te decimos exactamente qué construir para ver resultados en 90 días.
         </p>
-        <button style={{ ...rv(cta.visible,.3), display:'inline-flex', alignItems:'center', gap:'10px', background:'rgba(240,237,232,0.07)', border:'1px solid rgba(240,237,232,0.12)', color:s.white, fontFamily:"'DM Sans',sans-serif", fontSize:'12px', padding:'16px 32px', cursor:'pointer', borderRadius:'100px', transition:'background .25s' }}
+        <a href='https://wa.me/523312499320?text=Hola%20VANT%20Studio%20quiero%20agendar%20una%20llamada' target='_blank' rel='noopener noreferrer' style={{ ...rv(cta.visible,.3), display:'inline-flex', alignItems:'center', gap:'10px', background:'rgba(240,237,232,0.07)', border:'1px solid rgba(240,237,232,0.12)', color:s.white, fontFamily:"'DM Sans',sans-serif", fontSize:'12px', padding:'16px 32px', cursor:'pointer', borderRadius:'100px', transition:'background .25s' }}
           onMouseEnter={e=>(e.currentTarget.style.background='rgba(240,237,232,0.14)')}
           onMouseLeave={e=>(e.currentTarget.style.background='rgba(240,237,232,0.07)')}
-        >Agendar conversación →</button>
+        >Agendar conversación →</a>
       </div>
 
       <footer style={{ padding:'32px clamp(20px,5vw,56px)', borderTop:'1px solid rgba(240,237,232,0.05)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>

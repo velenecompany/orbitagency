@@ -158,6 +158,7 @@ export default function CTA() {
         }}
         onMouseEnter={e => (e.currentTarget.style.background = 'rgba(240,237,232,0.14)')}
         onMouseLeave={e => (e.currentTarget.style.background = 'rgba(240,237,232,0.07)')}
+        onClick={() => window.open('https://wa.me/523312499320?text=Hola%20VANT%20Studio%20quiero%20agendar%20una%20llamada', '_blank')}
       >
         Agendar conversación →
       </button>
