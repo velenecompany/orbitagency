@@ -16,9 +16,9 @@ const testimonials = [
   },
   {
     quote: 'Mi chatbot responde, agenda y cobra mientras duermo. No sabía que automatizar WhatsApp era tan poderoso.',
-    name: 'Alain Herrera',
-    role: 'Fundador · VELENÉ, Guadalajara',
-    initials: 'AH',
+    name: 'Fernando Herrera',
+    role: 'Co-fundador · VELENÉ, Guadalajara',
+    initials: 'FH',
   },
 ]
 
